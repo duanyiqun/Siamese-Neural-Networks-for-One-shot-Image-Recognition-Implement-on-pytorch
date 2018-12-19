@@ -7,7 +7,7 @@ import time
 import random
 import torchvision.datasets as dset
 from PIL import Image
-import torchvision.transform as transforms
+import torchvision.transforms as transforms
 
 
 class OmniTrain(Dataset):
