@@ -12,7 +12,10 @@ import torchvision.transforms as transforms
 
 class OmniTrain(Dataset):
 
-    def __init__(self, dataPath, transform=transforms.ToTensor()):
+    def __init__(self, dataPath, transform=transforms.Compose([
+        transforms.RandomAffine(15),
+        transforms.ToTensor()
+    ])):
         super(OmniTrain, self).__init__()
         np.random.seed(0)
         self.transform = transform
@@ -38,7 +41,7 @@ class OmniTrain(Dataset):
         return datas, idx
 
     def __len__(self):
-        return  len(self.imglist)
+        return  500000
 
     def __getitem__(self, index):
         # image1 = random.choice(self.dataset.imgs)
@@ -77,12 +80,12 @@ class OmniTest(Dataset):
         self.way = way
         self.img1 = None
         self.c1 = None
-        self.datas, self.num_classes = self.loadToMem(dataPath)
+        self.datas, self.num_classes = self.build_index(dataPath)
     
     def img_loader(self, path):
         return Image.open(path).convert('L')
 
-    def loadToMem(self, dataPath):
+    def build_index(self, dataPath):
         print("Establish image indeces to testing...")
         datas = {}
         idx = 0
@@ -128,4 +131,4 @@ if __name__=='__main__':
     trainSet = OmniTrain('./images_background',transform=transforms.ToTensor())
     trainLoader = DataLoader(trainSet, batch_size=2, shuffle=False, num_workers=2)
     for batch_id, (img1, img2, label) in enumerate(trainLoader, 1):
-        print(batch_id, img1, img2, label)
+        print(batch_id, img1.size(), img2.size(), label.size())
